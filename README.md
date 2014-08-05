@@ -2,6 +2,27 @@
 
 Attrition is a simple queue system that uses a mongoDB collection to store jobs.
 
+Attrition handles task-locking between processes so you can run many instances of a
+worker service, tasks are unlocked after a timeout (default 15 minutes). 
+
+Tasks whos worker function raise an error remain in the queue and are blocked,
+after which manual intervention is required.  The objective here is that no 
+tasks should ever be lost.
+
+## Why would I use this over a 'proper' *MQ service? 
+
+Because you might not want to add another SPOF to your deployment. For us, Mongo, while clustered
+is a critical failure point, if mongo is not accessible then no service is available. Adding an MQ
+system introduces another critical failure point that needs to be managed, MongoDB is quite capable
+of managing a queue of tasks.
+
+## TODOs
+
+ * Write more unit tests
+ * Implement healthCheck
+
+## Contrived Example:
+
 Here is a simple queue example that uses a state flag to pass a task between workers.
 
 ```javascript
