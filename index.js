@@ -36,7 +36,7 @@ exports.start = function(collection, match, worker, pollTime, lockTime, log) {
                     if (!task)  return callback(null);
 
                     // Run the worker function.
-                    try { worker(task, done); } catch (err) { done(err); }
+                    try { worker(task, done, collection); } catch (err) { done(err); }
 
                     function done(err, keepTask, updates) {
 
