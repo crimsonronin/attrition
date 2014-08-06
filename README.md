@@ -53,8 +53,6 @@ function shippingWorker(task, callback) {
 }
 
 //send a task to the queue
-attrition.send(queue, {state : 'invoicing', data : { shippingAddress : {...}}}, callback);
+attrition.queue(queue, {state : 'invoicing', data : { shippingAddress : {...}}}, callback);
 
-// get a healthcheck of the queue, number of tasks etc.
-attrition.healthCheck(queue, callback);
 ```
