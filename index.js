@@ -1,8 +1,10 @@
-var safe = {safe: true, journal: true, w : 1};
+var safe = {w : 1};
 
 exports.queue = function(collection, task, callback) {
     if(!callback) callback = function(){};
-    collection.insert(task, safe, callback);
+    collection.insert(task, safe, function(err, res) {
+        callback(err, res);
+    });
 };
 
 exports.start = function(collection, match, worker, pollTime, lockTime, log) {
@@ -33,7 +35,7 @@ exports.start = function(collection, match, worker, pollTime, lockTime, log) {
                     if (err) { log(msg); return callback(new Error(msg)); }
 
                     // Handle getting no results (empty queue).
-                    if (!task)  return callback(null);
+                    if (!task) return callback(null);
 
                     // Run the worker function.
                     try { worker(task, done, collection); } catch (err) { done(err); }
@@ -58,8 +60,9 @@ exports.start = function(collection, match, worker, pollTime, lockTime, log) {
                         if (keepTask) {
                             // completed: unlock and apply optional updates.
                             if(!updates) updates = {};
-                            if(!updates.$set) updates.$set = [];
-                            updates.$set.locked = null; // unlock the task.
+                            if(!updates.$set) updates.$set = {};
+                            if(!updates.$set.attrition) updates.$set.attrition = {};
+                            updates.$set.attrition.locked = null; // unlock the task.
                             collection.update({_id : task._id}, updates, safe,
                                     function (err) {
                                         if (err) {
