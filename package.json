@@ -1,6 +1,6 @@
 {
   "name": "attrition",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Simple queue/worker library for MongoDB.",
   "scripts": {
     "test": "mocha --reporter spec --bail --check-leaks test/"

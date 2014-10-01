@@ -22,7 +22,8 @@ exports.start = function(collection, match, worker, pollTime, lockTime, log) {
                 {$or : [
                     {'attrition.locked' : null},
                     {'attrition.locked' : {$lt : now-lockTime}}]},
-                    {'attrition.blocked' : null}
+                {'attrition.last' : {$ne : now}},
+                {'attrition.blocked' : null}
             ]
         };
         if(match) query.$and.push(match);
@@ -63,6 +64,8 @@ exports.start = function(collection, match, worker, pollTime, lockTime, log) {
                             if(!updates.$set) updates.$set = {};
                             if(!updates.$set.attrition) updates.$set.attrition = {};
                             updates.$set.attrition.locked = null; // unlock the task.
+                            // set last pass so we dont match again this pass
+                            updates.$set.attrition.last = now; 
                             collection.update({_id : task._id}, updates, safe,
                                     function (err) {
                                         if (err) {
