@@ -33,7 +33,7 @@ exports.start = function(collection, match, worker, pollTime, lockTime, log) {
                 query, {}, {$set: {'attrition.locked': now}}, safe,
                 function (err, task) {
                     // check we didn't get an error from the query.
-                    if (err) { log(msg); return callback(new Error(msg)); }
+                    if (err) { log(err); return callback(new Error(err)); }
 
                     // Handle getting no results (empty queue).
                     if (!task) return callback(null);
