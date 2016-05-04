@@ -3,12 +3,16 @@
   "version": "0.0.6",
   "description": "Simple queue/worker library for MongoDB.",
   "scripts": {
-    "test": "mocha --reporter spec --bail --check-leaks test/"
+    "test": "mocha --reporter spec --bail --check-leaks test/",
+    "lint": "./node_modules/.bin/eslint ./index.js"
   },
   "author": "Pomke",
   "license": "MIT",
   "repository" : "git@github.com:pomke/attrition.git",
   "devDependencies": {
+    "babel-eslint": "5.0.0-beta9",
+    "eslint": "1.10.3",
+    "eslint-config-etaskr": "1.0.2",
     "mocha": "~1.21.0",
     "mongodb": "*"
   }
